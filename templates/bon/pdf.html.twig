@@ -1,0 +1,37 @@
+{% block body %}
+    <br>
+    <h4>Bon {{ bon.id }}</h4>
+    <p>Datum : {{ bon.datum ? bon.datum|date('Y-m-d') : '' }}</p><br>
+    <p>Tafelnummer {{ bon.reserveringId.tafelId }}</p>
+
+    <table class="table table-striped pull-right">
+        <thead>
+        <tr>
+            <td>Aantal</td>
+            <td>Product</td>
+            <td>Prijs</td>
+            <td>Totaal</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bestelling in bon.reserveringId.bestellings %}
+            <tr>
+                <td>{{ bestelling.aantal }}</td>
+                <td>{{ bestelling.menuItemId }}</td>
+                <td>{{ bestelling.menuItemId.prijs }}</td>
+                <td>{{ bestelling.aantal * bestelling.menuItemId.prijs }}</td>
+            </tr>
+        {% endfor %}
+        <td></td>
+        <td></td>
+        <td>Totaal :</td>
+        <td>
+            {% set total = 0 %}
+            {% for bestelling in bon.reserveringId.bestellings %}
+                {% set total = total + bestelling.aantal * bestelling.menuItemId.getPrijs() %}
+            {% endfor %}
+            {{ total }} EUR
+        </td>
+        </tbody>
+    </table>
+{% endblock %}
